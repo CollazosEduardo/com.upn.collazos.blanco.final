@@ -10,6 +10,9 @@ import android.widget.EditText;
 
 import com.upn.collazos.blanco.finall.model.Duelista;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CrearDuelista extends AppCompatActivity {
 
     private Button btnNewCardDuelista;
@@ -40,7 +43,9 @@ public class CrearDuelista extends AppCompatActivity {
             public void onClick(View view) {
                 String nombre = txtNombreDuelista.getText().toString();
 
-                Duelista duelista = new Duelista(nombre);
+                ArrayList<String> cartas = new ArrayList<String>();
+
+                Duelista duelista = new Duelista(nombre,cartas);
                 saveNewDuelistaData(view, duelista);
                 back(view);
             }

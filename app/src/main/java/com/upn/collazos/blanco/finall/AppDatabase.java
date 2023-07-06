@@ -6,6 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.upn.collazos.blanco.finall.daos.CartaDao;
 import com.upn.collazos.blanco.finall.daos.DuelistaDao;
 import com.upn.collazos.blanco.finall.model.Duelista;
 
@@ -13,6 +14,7 @@ import com.upn.collazos.blanco.finall.model.Duelista;
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DuelistaDao duelistaDao();
+    public abstract CartaDao cartaDao();
     private static volatile AppDatabase instance;
 
     static synchronized AppDatabase getInstance(Context context) {

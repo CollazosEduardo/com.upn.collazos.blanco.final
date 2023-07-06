@@ -17,5 +17,5 @@ import java.util.List;
         void insert(Duelista duelista);
 
         @Query("SELECT * FROM Duelista WHERE nombre IN (:nombre)")
-        Duelista loadAllByTitle(String nombre);
+        Duelista loadAllByNombre(String nombre);
     }

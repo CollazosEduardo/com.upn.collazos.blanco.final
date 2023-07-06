@@ -22,11 +22,11 @@
 
 
     <TextView
-        android:id="@+id/txtNombreCarta"
+        android:id="@+id/txtNombreCartaDetalle"
         android:layout_width="250dp"
         android:layout_height="30dp"
         android:layout_marginTop="28dp"
-        android:text="Resumen"
+        android:text="Nombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombreCarta"
+        app:layout_constraintTop_toBottomOf="@+id/txtNombreCartaDetalle"
         tools:ignore="MissingConstraints" />
 
     <TextView
