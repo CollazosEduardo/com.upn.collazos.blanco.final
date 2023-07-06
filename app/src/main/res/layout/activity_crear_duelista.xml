@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnNewCardNewDuelista" />
 
     <Button
-        android:id="@+id/btnSaveBoock"
+        android:id="@+id/btnSaveNewDuelista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
@@ -64,15 +64,5 @@
         app:layout_constraintTop_toBottomOf="@+id/rcvCartasNewDuelista"
         app:layout_constraintVertical_bias="0.234" />
 
-    <Button
-        android:id="@+id/btnCargarPortada"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:text="Cargar Imagen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rcvCartasNewDuelista"
-        app:layout_constraintVertical_bias="0.234" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
