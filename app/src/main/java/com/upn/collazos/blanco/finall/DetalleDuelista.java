@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upn.collazos.blanco.finall.adapters.CartaItemAdapter;
 import com.upn.collazos.blanco.finall.model.Carta;
@@ -53,6 +54,7 @@ public class DetalleDuelista extends AppCompatActivity {
     }
 
     private void moveToDetalle(String nombre){
+        Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show();
         Intent description = new Intent(getApplicationContext(), DetalleCarta.class);
         description.putExtra("nombre", nombre);
         startActivity(description);

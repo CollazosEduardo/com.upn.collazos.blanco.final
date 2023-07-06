@@ -19,7 +19,7 @@ public interface CartaDao {
     void insert(Carta carta);
 
     @Query("SELECT * FROM Carta WHERE nombre_duelista IN (:nombreDuelista)")
-    Duelista loadAllCartsDuelista(String nombreDuelista);
+    List<Carta> loadAllCartsDuelista(String nombreDuelista);
     @Query("SELECT * FROM Carta WHERE nombre IN (:nombre)")
     Carta loadAllByNombre(String nombre);
 }

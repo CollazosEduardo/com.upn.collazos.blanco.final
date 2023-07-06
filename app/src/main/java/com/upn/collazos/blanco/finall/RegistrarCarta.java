@@ -32,6 +32,10 @@ public class RegistrarCarta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_carta);
 
+        Intent intent = getIntent();
+
+        String nombreDuelista = intent.getStringExtra("nombre");
+
         btnGuardarCarta = findViewById(R.id.btnSaveCarta);
         btnCargarImagen = findViewById(R.id.btnCargarImagenCarta);
 
@@ -47,14 +51,17 @@ public class RegistrarCarta extends AppCompatActivity {
             public void onClick(View view) {
 
                 String nombre = tvNombre.getText().toString();
-                String puntosAtaque = tvPuntosAtaque.getText().toString();
-                String puntosDefensa = tvPuntosDefensa.getText().toString();
+                int puntosAtaque = Integer.parseInt(tvPuntosAtaque.getText().toString());
+                int puntosDefensa = Integer.parseInt(tvPuntosDefensa.getText().toString());
                 String image = "";
                 String ubicacion = tvUbicacionRegistro.getText().toString();
 
-                Carta carta = new Carta(nombre,puntosAtaque,puntosDefensa,image,ubicacion)
+                Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, image, ubicacion);
 
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
+
+                Intent intent = new Intent(getApplicationContext(), CrearDuelista.class);
+                intent.putExtra("nombre", nombreDuelista);
                 startActivity(intent);
             }
         });

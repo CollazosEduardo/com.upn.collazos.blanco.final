@@ -9,10 +9,11 @@ public class Carta {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    @ColumnInfo(name = "nombre_duelista")
-    public String nombreDuelista;
 
     public String nombre;
+
+    @ColumnInfo(name = "nombre_duelista")
+    public String nombreDuelista;
     @ColumnInfo(name = "puntos_ataque")
     public int puntosAtaque;
     @ColumnInfo(name = "puntos_defensa")
@@ -20,8 +21,9 @@ public class Carta {
     public String imagen;
     public String ubicacionRegistro;
 
-    public Carta(String nombre, int puntosAtaque, int puntosDefensa, String imagen, String ubicacionRegistro) {
+    public Carta(String nombre, String nombreDuelista, int puntosAtaque, int puntosDefensa, String imagen, String ubicacionRegistro) {
         this.nombre = nombre;
+        this.nombreDuelista = nombreDuelista;
         this.puntosAtaque = puntosAtaque;
         this.puntosDefensa = puntosDefensa;
         this.imagen = imagen;
