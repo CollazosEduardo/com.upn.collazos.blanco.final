@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
+
+import com.upn.collazos.blanco.finall.model.Duelista;
 
 public class CrearDuelista extends AppCompatActivity {
 
     private Button btnNewCardDuelista;
 
     private Button btnSaveDuelista;
+
+    private EditText txtNombreDuelista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,7 @@ public class CrearDuelista extends AppCompatActivity {
 
         btnNewCardDuelista = findViewById(R.id.btnNewCardNewDuelista);
         btnSaveDuelista = findViewById(R.id.btnSaveNewDuelista);
+        txtNombreDuelista = findViewById(R.id.edtNombreNewDuelista);
 
         btnNewCardDuelista.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,9 +38,20 @@ public class CrearDuelista extends AppCompatActivity {
         btnSaveDuelista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                String nombre = txtNombreDuelista.getText().toString();
+
+                Duelista duelista = new Duelista(nombre);
+                saveNewDuelistaData(view, duelista);
+                back(view);
             }
         });
+    }
+
+    private void saveNewDuelistaData(View view, Duelista duelista){
+        AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
+    }
+    public void back(View view){
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
     }
 }

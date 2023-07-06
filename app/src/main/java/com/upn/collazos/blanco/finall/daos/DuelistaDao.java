@@ -9,7 +9,7 @@ import com.upn.collazos.blanco.finall.model.Duelista;
 import java.util.List;
 
     @Dao
-    public interface LibroDao {
+    public interface DuelistaDao {
         @Query("SELECT * FROM Duelista")
         List<Duelista> getAll();
 
