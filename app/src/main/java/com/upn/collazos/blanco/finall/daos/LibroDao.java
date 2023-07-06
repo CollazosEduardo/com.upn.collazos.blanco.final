@@ -1,0 +1,21 @@
+package com.upn.collazos.blanco.finall.daos;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import com.upn.collazos.blanco.finall.model.Duelista;
+
+import java.util.List;
+
+    @Dao
+    public interface LibroDao {
+        @Query("SELECT * FROM Duelista")
+        List<Duelista> getAll();
+
+        @Insert
+        void insert(Duelista duelista);
+
+        @Query("SELECT * FROM Duelista WHERE nombre IN (:nombre)")
+        Duelista loadAllByTitle(String nombre);
+    }
