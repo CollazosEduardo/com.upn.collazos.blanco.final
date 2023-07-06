@@ -43,6 +43,9 @@ public class DetalleDuelista extends AppCompatActivity {
 
 
         List<Carta> lista = AppDatabase.getInstance(getApplicationContext()).cartaDao().getAll();
+
+
+
         itemAdapter = new CartaItemAdapter(lista, new CartaItemAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(Carta carta) {
@@ -54,7 +57,6 @@ public class DetalleDuelista extends AppCompatActivity {
     }
 
     private void moveToDetalle(String nombre){
-        Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show();
         Intent description = new Intent(getApplicationContext(), DetalleCarta.class);
         description.putExtra("nombre", nombre);
         startActivity(description);

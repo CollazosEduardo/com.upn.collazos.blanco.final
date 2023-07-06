@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +15,16 @@ import com.upn.collazos.blanco.finall.adapters.CartaItemAdapter;
 import com.upn.collazos.blanco.finall.adapters.DuelistaItemAdapter;
 import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
+import com.upn.collazos.blanco.finall.services.DuelistaService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CrearDuelista extends AppCompatActivity {
 
@@ -93,9 +101,33 @@ public class CrearDuelista extends AppCompatActivity {
 
     private void saveNewDuelistaData(View view, Duelista duelista){
         AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
+        saveDuelistaApi(duelista);
     }
     public void back(View view){
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
+    }
+    private void saveDuelistaApi(Duelista duelista){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://64a6b8de096b3f0fcc806f8a.mockapi.io/final/") // revisar
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        DuelistaService service = retrofit.create(DuelistaService.class);
+
+
+        Call<Duelista> call = service.create(duelista);
+
+        call.enqueue(new Callback<Duelista>() {
+            @Override
+            public void onResponse(Call<Duelista> call, Response<Duelista> response) {
+                Log.i("MAIN_APP",  String.valueOf(response.code()));
+            }
+
+            @Override
+            public void onFailure(Call<Duelista> call, Throwable t) {
+
+            }
+        });
     }
 }
