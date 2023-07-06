@@ -84,7 +84,7 @@ public class RegistrarCarta extends AppCompatActivity {
                 int puntosDefensa = Integer.parseInt(tvPuntosDefensa.getText().toString());
                 String image = s64Image;
 
-
+/*
                 Retrofit retrofit123 = new Retrofit.Builder()
                         .baseUrl("https://demo-upn.bit2bittest.com/")
                         .addConverterFactory(GsonConverterFactory.create())
@@ -119,12 +119,11 @@ public class RegistrarCarta extends AppCompatActivity {
                         Log.i("Respuesta inactiva", "");
                     }
                 });
-
+*/
 
                 String ubicacion = tvUbicacionRegistro.getText().toString();
 
-                String imageCarta = "https://demo-upn.bit2bittest.com/" +  urlImage;
-                Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, imageCarta, ubicacion);
+                Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, image, ubicacion);
 
                 AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
 
