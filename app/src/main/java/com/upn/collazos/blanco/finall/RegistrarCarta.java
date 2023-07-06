@@ -26,6 +26,7 @@ import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
 import com.upn.collazos.blanco.finall.services.CartasService;
 import com.upn.collazos.blanco.finall.services.DuelistaService;
+import com.upn.collazos.blanco.finall.services.UserService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class RegistrarCarta extends AppCompatActivity {
 
     private String s64Image;
     private String base64img;
+    String urlImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +83,48 @@ public class RegistrarCarta extends AppCompatActivity {
                 int puntosAtaque = Integer.parseInt(tvPuntosAtaque.getText().toString());
                 int puntosDefensa = Integer.parseInt(tvPuntosDefensa.getText().toString());
                 String image = s64Image;
+
+
+                Retrofit retrofit123 = new Retrofit.Builder()
+                        .baseUrl("https://demo-upn.bit2bittest.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                UserService service=retrofit123.create(UserService.class);
+
+
+
+                Call<UserService.ImageResponse> call = service.saveImage(new UserService.ImageToSave(s64Image));
+
+                call.enqueue(new Callback<UserService.ImageResponse>() {
+                    @Override
+                    public void onResponse(Call<UserService.ImageResponse> call, Response<UserService.ImageResponse> response) {
+                        Log.i("Respuesta activa", response.toString());
+                        if (response.isSuccessful()) {
+
+                            UserService.ImageResponse imageResponse = response.body();
+                            Log.i("Respues", response.toString());
+                            urlImage = imageResponse.getUrl();
+                            Log.i("Imagen url:", urlImage);
+
+                        } else {
+
+                            Log.e("Error cargar imagen",response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserService.ImageResponse> call, Throwable t) {
+                        // Error de red o de la API
+                        Log.i("Respuesta inactiva", "");
+                    }
+                });
+
+
                 String ubicacion = tvUbicacionRegistro.getText().toString();
 
-                Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, image, ubicacion);
+                String imageCarta = "https://demo-upn.bit2bittest.com/" +  urlImage;
+                Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, imageCarta, ubicacion);
 
                 AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
 
