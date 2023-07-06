@@ -10,8 +10,10 @@ public class Duelista {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String nombre;
+    public String cartas;
 
-    public Duelista(String nombre, ArrayList<String> cartas) {
+    public Duelista(String nombre, String cartas) {
         this.nombre = nombre;
+        this.cartas = cartas;
     }
 }

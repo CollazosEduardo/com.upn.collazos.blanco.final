@@ -8,9 +8,10 @@ import androidx.room.RoomDatabase;
 
 import com.upn.collazos.blanco.finall.daos.CartaDao;
 import com.upn.collazos.blanco.finall.daos.DuelistaDao;
+import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
 
-@Database(entities = {Duelista.class},version = 1)
+@Database(entities = {Duelista.class, Carta.class},version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DuelistaDao duelistaDao();

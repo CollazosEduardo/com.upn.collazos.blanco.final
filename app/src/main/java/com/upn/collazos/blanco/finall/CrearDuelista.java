@@ -43,7 +43,7 @@ public class CrearDuelista extends AppCompatActivity {
             public void onClick(View view) {
                 String nombre = txtNombreDuelista.getText().toString();
 
-                ArrayList<String> cartas = new ArrayList<String>();
+                String cartas = "";
 
                 Duelista duelista = new Duelista(nombre,cartas);
                 saveNewDuelistaData(view, duelista);
@@ -53,6 +53,8 @@ public class CrearDuelista extends AppCompatActivity {
     }
 
     private void saveNewDuelistaData(View view, Duelista duelista){
+
+
         AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
     }
     public void back(View view){
