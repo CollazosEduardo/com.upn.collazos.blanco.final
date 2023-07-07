@@ -3,6 +3,7 @@ package com.upn.collazos.blanco.finall.daos;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
@@ -17,6 +18,9 @@ public interface CartaDao {
 
     @Insert
     void insert(Carta carta);
+
+    @Update
+    void updateCarta(Carta cartas);
 
     @Query("SELECT * FROM Carta WHERE nombre_duelista IN (:nombreDuelista)")
     List<Carta> loadAllCartsDuelista(String nombreDuelista);

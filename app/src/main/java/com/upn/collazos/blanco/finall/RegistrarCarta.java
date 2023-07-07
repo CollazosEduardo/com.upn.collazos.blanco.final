@@ -7,10 +7,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.upn.collazos.blanco.finall.Utils.RetrofitBuilder;
 import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
 import com.upn.collazos.blanco.finall.services.CartasService;
@@ -84,54 +87,12 @@ public class RegistrarCarta extends AppCompatActivity {
                 int puntosDefensa = Integer.parseInt(tvPuntosDefensa.getText().toString());
                 String image = s64Image;
 
-/*
-                Retrofit retrofit123 = new Retrofit.Builder()
-                        .baseUrl("https://demo-upn.bit2bittest.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                UserService service=retrofit123.create(UserService.class);
-
-
-
-                Call<UserService.ImageResponse> call = service.saveImage(new UserService.ImageToSave(s64Image));
-
-                call.enqueue(new Callback<UserService.ImageResponse>() {
-                    @Override
-                    public void onResponse(Call<UserService.ImageResponse> call, Response<UserService.ImageResponse> response) {
-                        Log.i("Respuesta activa", response.toString());
-                        if (response.isSuccessful()) {
-
-                            UserService.ImageResponse imageResponse = response.body();
-                            Log.i("Respues", response.toString());
-                            urlImage = imageResponse.getUrl();
-                            Log.i("Imagen url:", urlImage);
-
-                        } else {
-
-                            Log.e("Error cargar imagen",response.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserService.ImageResponse> call, Throwable t) {
-                        // Error de red o de la API
-                        Log.i("Respuesta inactiva", "");
-                    }
-                });
-*/
-
                 String ubicacion = tvUbicacionRegistro.getText().toString();
 
                 Carta carta = new Carta(nombre, nombreDuelista, puntosAtaque, puntosDefensa, image, ubicacion);
 
-                AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
-
-                saveCartaApi(carta);
-
-                Intent intent = new Intent(getApplicationContext(), CrearDuelista.class);
-                intent.putExtra("nombre", nombreDuelista);
-                startActivity(intent);
+                saveNewCartaData(carta);
+                onBack(nombreDuelista);
             }
         });
 
@@ -155,30 +116,51 @@ public class RegistrarCarta extends AppCompatActivity {
         });
     }
 
+    private void saveNewCartaData(Carta carta){
+        if(!isNetworkConnected()) {
+            System.out.println("No hay Internet");
+            AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
+        }
+        else {
+            System.out.println("Hay Internet");
+            AppDatabase.getInstance(getApplicationContext()).cartaDao().insert(carta);
+            saveCartaApi(carta);
+        }
+    }
+
     private void saveCartaApi(Carta carta){
+
+        Retrofit retrofit = RetrofitBuilder.build();
+
+        /*
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://64a6b8de096b3f0fcc806f8a.mockapi.io/final/") // revisar
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
+         */
         CartasService service = retrofit.create(CartasService.class);
+        Call<Carta> callCarta = service.create(carta);
 
-
-        Call<Carta> call = service.create(carta);
-
-        call.enqueue(new Callback<Carta>() {
+        callCarta.enqueue(new Callback<Carta>() {
             @Override
-            public void onResponse(Call<Carta> call, Response<Carta> response) {
-                Log.i("MAIN_APP",  String.valueOf(response.code()));
+            public void onResponse(Call<Carta> callCarta, Response<Carta> response) {
+                Log.i("MAIN_APP",  "Save API");
+                System.out.println("Save Api");
+                Log.i("MAIN_APP:",  String.valueOf(response.code()));
             }
 
             @Override
-            public void onFailure(Call<Carta> call, Throwable t) {
-
+            public void onFailure(Call<Carta> callCarta, Throwable t) {
+                Log.i("MAIN_APP",  "error en cartas ::CCCCCCCCC");
             }
         });
     }
 
+    private void onBack(String nombreDuelista){
+        Intent intent = new Intent(getApplicationContext(), CrearDuelista.class);
+        intent.putExtra("nombre", nombreDuelista);
+        startActivity(intent);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -235,4 +217,47 @@ public class RegistrarCarta extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent,"Select Image"),100);
     }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }
+
+
+
+/*
+                Retrofit retrofit123 = new Retrofit.Builder()
+                        .baseUrl("https://demo-upn.bit2bittest.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                UserService service=retrofit123.create(UserService.class);
+
+
+
+                Call<UserService.ImageResponse> call = service.saveImage(new UserService.ImageToSave(s64Image));
+
+                call.enqueue(new Callback<UserService.ImageResponse>() {
+                    @Override
+                    public void onResponse(Call<UserService.ImageResponse> call, Response<UserService.ImageResponse> response) {
+                        Log.i("Respuesta activa", response.toString());
+                        if (response.isSuccessful()) {
+
+                            UserService.ImageResponse imageResponse = response.body();
+                            Log.i("Respues", response.toString());
+                            urlImage = imageResponse.getUrl();
+                            Log.i("Imagen url:", urlImage);
+
+                        } else {
+
+                            Log.e("Error cargar imagen",response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserService.ImageResponse> call, Throwable t) {
+                        // Error de red o de la API
+                        Log.i("Respuesta inactiva", "");
+                    }
+                });
+*/

@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.upn.collazos.blanco.finall.Utils.RetrofitBuilder;
 import com.upn.collazos.blanco.finall.adapters.CartaItemAdapter;
 import com.upn.collazos.blanco.finall.adapters.DuelistaItemAdapter;
 import com.upn.collazos.blanco.finall.model.Carta;
@@ -74,9 +78,7 @@ public class CrearDuelista extends AppCompatActivity {
             public void onClick(View view) {
                 String nombre = txtNombreDuelista.getText().toString();
 
-                String cartas = "";
-
-                Duelista duelista = new Duelista(nombre,cartas);
+                Duelista duelista = new Duelista(nombre);
                 saveNewDuelistaData(view, duelista);
                 back(view);
             }
@@ -100,18 +102,27 @@ public class CrearDuelista extends AppCompatActivity {
     }
 
     private void saveNewDuelistaData(View view, Duelista duelista){
-        AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
-        saveDuelistaApi(duelista);
+
+        if(!isNetworkConnected()) {
+            AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
+        }
+        else {
+            AppDatabase.getInstance(getApplicationContext()).duelistaDao().insert(duelista);
+            saveDuelistaApi(duelista);
+        }
     }
     public void back(View view){
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
     }
     private void saveDuelistaApi(Duelista duelista){
-        Retrofit retrofit = new Retrofit.Builder()
+        Retrofit retrofit = RetrofitBuilder.build();
+                /*
+                new Retrofit.Builder()
                 .baseUrl("https://64a6b8de096b3f0fcc806f8a.mockapi.io/final/") // revisar
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+                 */
 
         DuelistaService service = retrofit.create(DuelistaService.class);
 
@@ -129,5 +140,10 @@ public class CrearDuelista extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

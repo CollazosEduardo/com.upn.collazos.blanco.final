@@ -9,9 +9,10 @@ public class Carta {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-
     public String nombre;
 
+    @ColumnInfo(name = "issinc")
+    public boolean isSinc;
     @ColumnInfo(name = "nombre_duelista")
     public String nombreDuelista;
     @ColumnInfo(name = "puntos_ataque")
@@ -28,5 +29,13 @@ public class Carta {
         this.puntosDefensa = puntosDefensa;
         this.imagen = imagen;
         this.ubicacionRegistro = ubicacionRegistro;
+    }
+
+    public void setSinc(boolean sinc) {
+        this.isSinc = sinc;
+    }
+
+    public boolean isSinc() {
+        return isSinc;
     }
 }

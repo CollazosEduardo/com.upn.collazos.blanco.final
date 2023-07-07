@@ -13,6 +13,7 @@ import com.upn.collazos.blanco.finall.adapters.CartaItemAdapter;
 import com.upn.collazos.blanco.finall.model.Carta;
 import com.upn.collazos.blanco.finall.model.Duelista;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetalleDuelista extends AppCompatActivity {
@@ -44,9 +45,15 @@ public class DetalleDuelista extends AppCompatActivity {
 
         List<Carta> lista = AppDatabase.getInstance(getApplicationContext()).cartaDao().getAll();
 
+        List<Carta> listaCartasDuelsita = new ArrayList<Carta>();
 
+        for(int i = 0; i < lista.size(); i++){
+            if(lista.get(i).nombreDuelista.equals(duelista.nombre)){
+                listaCartasDuelsita.add(lista.get(i));
+            }
+        }
 
-        itemAdapter = new CartaItemAdapter(lista, new CartaItemAdapter.OnItemClickListener(){
+        itemAdapter = new CartaItemAdapter(listaCartasDuelsita, new CartaItemAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(Carta carta) {
                 moveToDetalle(carta.nombre);
