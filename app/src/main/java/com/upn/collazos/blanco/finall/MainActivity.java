@@ -65,29 +65,63 @@ public class MainActivity extends AppCompatActivity {
 
         List<Duelista> duelistas =  AppDatabase.getInstance(getApplicationContext()).duelistaDao().getAll();
 
-
-        Duelista duelistaUpdate = new Duelista("");
-
         for(int i = 0; i < duelistas.size(); i++){
             if(duelistas.get(i).isSinc() == false){
-                duelistaUpdate.id = duelistas.get(i).id;
-                duelistaUpdate.nombre = duelistas.get(i).nombre;
+
+                Duelista duelistaUpdate = duelistas.get(i);
+                duelistaUpdate.isSinc = true;
+                AppDatabase.getInstance(getApplicationContext()).duelistaDao().updateDuelista(duelistaUpdate);
+                Call<Duelista> callUpdate = service.create(duelistaUpdate);
+
+                callUpdate.enqueue(new Callback<Duelista>() {
+                    @Override
+                    public void onResponse(Call<Duelista> callUpdate, Response<Duelista> response) {
+                        Log.i("MAIN_APP",  String.valueOf(response.code()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Duelista> callUpdate, Throwable t) {
+
+                    }
+                });
+
             }
         }
 
-        Call<Duelista> callUpdate = service.update(duelistaUpdate.id, duelistaUpdate);
-        callUpdate.enqueue(new Callback<Duelista>() {
-            @Override
-            public void onResponse(Call<Duelista> call, Response<Duelista> response) {
-                duelistaUpdate.isSinc = true;
-                AppDatabase.getInstance(getApplicationContext()).duelistaDao().updateDuelista(duelistaUpdate);
-            }
 
-            @Override
-            public void onFailure(Call<Duelista> call, Throwable t) {
+        List<Carta> cartas =  AppDatabase.getInstance(getApplicationContext()).cartaDao().getAll();
+
+        CartasService serviceCartas = retrofit.create(CartasService.class);
+
+        for(int i = 0; i < cartas.size(); i++){
+            if(cartas.get(i).isSinc() == false) {
+
+                Carta cartaUpdate = cartas.get(i);
+                cartaUpdate.isSinc = true;
+
+                AppDatabase.getInstance(getApplicationContext()).cartaDao().updateCarta(cartaUpdate);
+
+                Call<Carta> callCarta = serviceCartas.create(cartaUpdate);
+
+                callCarta.enqueue(new Callback<Carta>() {
+                    @Override
+                    public void onResponse(Call<Carta> callCarta, Response<Carta> response) {
+                        Log.i("MAIN_APP",  "Save API");
+                        System.out.println("Save Api");
+                        Log.i("MAIN_APP:",  String.valueOf(response.code()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<Carta> callCarta, Throwable t) {
+                        Log.i("MAIN_APP",  "error en cartas ::CCCCCCCCC");
+                    }
+                });
 
             }
-        });
+        }
+
+
+
 
         btnSinc.setOnClickListener(new View.OnClickListener() {
             @Override
